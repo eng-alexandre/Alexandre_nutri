@@ -110,7 +110,7 @@ Regras:
       try {
           let result;
           try {
-              const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+              const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
               result = await model.generateContent({
                   contents: [{ role: "user", parts: [{ text: prompt }] }],
                   generationConfig: {
@@ -118,14 +118,8 @@ Regras:
                   }
               });
           } catch (modelError) {
-              console.warn('Fallback: gemini-2.5-flash falhou, tentando gemini-flash-latest...', modelError.message);
-              const fallbackModel = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
-              result = await fallbackModel.generateContent({
-                  contents: [{ role: "user", parts: [{ text: prompt }] }],
-                  generationConfig: {
-                      responseMimeType: "application/json",
-                  }
-              });
+              console.warn('Fallback: gemini-1.5-flash falhou...', modelError.message);
+              throw modelError;
           }
 
           let responseText = result.response.text();

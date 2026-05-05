@@ -42,6 +42,24 @@ const MealPlanGenerator = ({ patient, onSaveComplete, onCancel }) => {
     }
   };
 
+  const createEmptyPlan = () => {
+    const emptyPlan = {
+      plano_semanal: [
+        "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"
+      ].map(dia => ({
+        dia,
+        refeicoes: {
+          cafe_da_manha: ["", "", "", "", ""],
+          lanche_manha: ["", "", "", "", ""],
+          almoco: ["", "", "", "", ""],
+          lanche_tarde: ["", "", "", "", ""],
+          jantar: ["", "", "", "", ""]
+        }
+      }))
+    };
+    setPlan(emptyPlan);
+  };
+
   const handleMealChange = (diaIndex, refeicaoKey, opcaoIndex, value) => {
     const newPlan = { ...plan };
     newPlan.plano_semanal[diaIndex].refeicoes[refeicaoKey][opcaoIndex] = value;
@@ -95,9 +113,13 @@ const MealPlanGenerator = ({ patient, onSaveComplete, onCancel }) => {
           </div>
         )}
 
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button className="btn-secondary" onClick={onCancel} style={{ width: 'auto' }}>
             Cancelar
+          </button>
+          <button className="btn-secondary" onClick={createEmptyPlan} style={{ width: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: 'white' }}>
+            <Edit2 size={18} />
+            Criar Manualmente
           </button>
           <button 
             className="btn-primary" 
