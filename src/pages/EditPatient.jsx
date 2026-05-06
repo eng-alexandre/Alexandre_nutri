@@ -179,7 +179,8 @@ const EditPatient = () => {
           refeicoes_por_dia: formData.refeicoes_por_dia ? parseInt(formData.refeicoes_por_dia) : null,
           litros_agua: formData.litros_agua ? parseFloat(formData.litros_agua) : null,
           horario_acorda: formatTime(formData.horario_acorda),
-          horario_dorme: formatTime(formData.horario_dorme)
+          horario_dorme: formatTime(formData.horario_dorme),
+          data_nascimento: formData.data_nascimento || null,
         })
         .eq('id', id);
 

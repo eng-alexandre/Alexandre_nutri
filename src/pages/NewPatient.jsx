@@ -151,6 +151,7 @@ const NewPatient = () => {
           altura: formData.altura ? parseFloat(formData.altura) : null,
           refeicoes_por_dia: formData.refeicoes_por_dia ? parseInt(formData.refeicoes_por_dia) : null,
           litros_agua: formData.litros_agua ? parseFloat(formData.litros_agua) : null,
+          data_nascimento: formData.data_nascimento || null,
           // Format times for display if needed, but schema is text, so we store raw or formatted?
           // The prompt says "sistema converte automaticamente", so let's format it.
           horario_acorda: formatTime(formData.horario_acorda),

@@ -102,6 +102,7 @@ const PatientProfile = () => {
           altura: formData.altura ? parseFloat(formData.altura) : null,
           refeicoes_por_dia: formData.refeicoes_por_dia ? parseInt(formData.refeicoes_por_dia) : null,
           litros_agua: formData.litros_agua ? parseFloat(formData.litros_agua) : null,
+          data_nascimento: formData.data_nascimento || null,
         })
         .eq('id', id);
 
@@ -129,6 +130,7 @@ const PatientProfile = () => {
           cintura: consultationData.cintura ? parseFloat(consultationData.cintura) : null,
           quadril: consultationData.quadril ? parseFloat(consultationData.quadril) : null,
           percentual_gordura: consultationData.percentual_gordura ? parseFloat(consultationData.percentual_gordura) : null,
+          proximo_retorno: consultationData.proximo_retorno || null
         }]);
 
       if (error) throw error;
