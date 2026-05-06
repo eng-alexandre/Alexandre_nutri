@@ -5,12 +5,17 @@ import { supabase } from '../lib/supabase';
 
 import healthyFood from '../assets/healthy-food.png';
 
-const Sidebar = () => {
+const Sidebar = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    if (onClose) onClose();
     navigate('/login');
+  };
+
+  const handleLinkClick = () => {
+    if (onClose) onClose();
   };
 
   const navItems = [
@@ -19,7 +24,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="sidebar">
+    <>
       <div className="sidebar-header">
         <h1 className="logo-text">NutriSystem</h1>
       </div>
@@ -29,6 +34,7 @@ const Sidebar = () => {
           <NavLink
             key={item.path}
             to={item.path}
+            onClick={handleLinkClick}
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
           >
             <item.icon size={20} />
@@ -74,7 +80,7 @@ const Sidebar = () => {
           <span>Sair</span>
         </button>
       </div>
-    </aside>
+    </>
   );
 };
 

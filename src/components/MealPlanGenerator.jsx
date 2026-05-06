@@ -140,19 +140,21 @@ const MealPlanGenerator = ({ patient, onSaveComplete, onCancel }) => {
   }
 
   return (
-    <div className="dashboard-card" style={{ padding: '24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <div className="dashboard-card" style={{ padding: 'min(24px, 4vw)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+        <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: 0, fontSize: 'min(1.2rem, 5vw)' }}>
           <Edit2 size={20} />
-          Revisar e Editar Plano Gerado
+          <span className="hide-mobile">Revisar e Editar Plano</span>
+          <span className="show-mobile">Editar Plano</span>
         </h3>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <button className="btn-secondary" onClick={onCancel} disabled={saving} style={{ width: 'auto' }}>
+        <div style={{ display: 'flex', gap: '12px', width: '100%', justifyContent: 'flex-end' }}>
+          <button className="btn-secondary" onClick={onCancel} disabled={saving} style={{ width: 'auto', padding: '8px 12px' }}>
             Descartar
           </button>
-          <button className="btn-primary" onClick={savePlan} disabled={saving} style={{ width: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button className="btn-primary" onClick={savePlan} disabled={saving} style={{ width: 'auto', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px' }}>
             <Save size={18} />
-            {saving ? 'Salvando...' : 'Salvar Plano Definitivo'}
+            <span className="hide-mobile">{saving ? 'Salvando...' : 'Salvar Plano Definitivo'}</span>
+            <span className="show-mobile">{saving ? '...' : 'Salvar'}</span>
           </button>
         </div>
       </div>
@@ -166,21 +168,21 @@ const MealPlanGenerator = ({ patient, onSaveComplete, onCancel }) => {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
         {plan.plano_semanal.map((dia, diaIndex) => (
-          <div key={diaIndex} style={{ border: '1px solid var(--gray-200)', borderRadius: '8px', padding: '20px', background: '#fafafa' }}>
-            <h4 style={{ color: 'var(--primary-color)', marginBottom: '16px', fontSize: '18px', borderBottom: '2px solid var(--gray-200)', paddingBottom: '8px' }}>
+          <div key={diaIndex} style={{ border: '1px solid var(--gray-200)', borderRadius: '8px', padding: 'min(20px, 4vw)', background: '#fafafa' }}>
+            <h4 style={{ color: 'var(--primary-color)', marginBottom: '16px', fontSize: 'min(1.1rem, 5vw)', borderBottom: '2px solid var(--gray-200)', paddingBottom: '8px' }}>
               {dia.dia}
             </h4>
             
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px' }}>
               {Object.entries(dia.refeicoes).map(([key, opcoes]) => (
                 <div key={key} style={{ background: '#fff', padding: '16px', borderRadius: '6px', border: '1px solid var(--gray-100)' }}>
-                  <strong style={{ display: 'block', marginBottom: '12px', color: 'var(--gray-800)' }}>
+                  <strong style={{ display: 'block', marginBottom: '12px', color: 'var(--gray-800)', fontSize: '0.9rem' }}>
                     {formatRefeicaoName(key)}
                   </strong>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {opcoes.map((opcao, opcaoIndex) => (
                       <div key={opcaoIndex} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                        <span style={{ color: 'var(--gray-400)', fontSize: '12px', width: '20px' }}>{opcaoIndex + 1}.</span>
+                        <span style={{ color: 'var(--gray-400)', fontSize: '11px', width: '15px' }}>{opcaoIndex + 1}.</span>
                         <input
                           type="text"
                           value={opcao}

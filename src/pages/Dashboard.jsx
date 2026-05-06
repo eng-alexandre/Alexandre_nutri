@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import Sidebar from '../components/Sidebar';
+import DashboardLayout from '../components/DashboardLayout';
 import DashboardCard from '../components/DashboardCard';
 import { Users, Calendar, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -109,62 +109,56 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="dashboard-layout">
-        <Sidebar />
-        <main className="main-content">
-          <div className="empty-message">Carregando dados...</div>
-        </main>
-      </div>
+      <DashboardLayout>
+        <div className="empty-message">Carregando dados...</div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="dashboard-layout">
-      <Sidebar />
-      <main className="main-content">
-        <header className="dashboard-header">
-          <h1>Olá, {user?.user_metadata?.full_name?.split(' ')[0] || 'Nutricionista'}!</h1>
-          <p className="auth-subtitle" style={{ textAlign: 'left', marginBottom: 0 }}>
-            Aqui está o resumo dos seus atendimentos.
-          </p>
-        </header>
+    <DashboardLayout>
+      <header className="dashboard-header">
+        <h1>Olá, {user?.user_metadata?.full_name?.split(' ')[0] || 'Nutricionista'}!</h1>
+        <p className="auth-subtitle" style={{ textAlign: 'left', marginBottom: 0 }}>
+          Aqui está o resumo dos seus atendimentos.
+        </p>
+      </header>
 
-        <div className="dashboard-grid">
-          <DashboardCard 
-            title="Total de Pacientes" 
-            value={stats.totalPatients} 
-            icon={Users}
-          />
-          
-          <DashboardCard 
-            title="Consultas da Semana" 
-            value={stats.weekConsultations} 
-            icon={Calendar}
-          />
+      <div className="dashboard-grid">
+        <DashboardCard 
+          title="Total de Pacientes" 
+          value={stats.totalPatients} 
+          icon={Users}
+        />
+        
+        <DashboardCard 
+          title="Consultas da Semana" 
+          value={stats.weekConsultations} 
+          icon={Calendar}
+        />
 
-          <DashboardCard 
-            title="Pacientes sem Retorno" 
-            icon={AlertCircle}
-          >
-            {stats.noReturnPatients.length > 0 ? (
-              <ul className="patient-list">
-                {stats.noReturnPatients.map(patient => (
-                  <li key={patient.id}>
-                    <Link to={`/pacientes/${patient.id}`} className="patient-item">
-                      {patient.nome}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="empty-message">
-                Nenhum paciente sem retorno no momento
-              </div>
-            )}
-          </DashboardCard>
-        </div>
-      </main>
-    </div>
+        <DashboardCard 
+          title="Pacientes sem Retorno" 
+          icon={AlertCircle}
+        >
+          {stats.noReturnPatients.length > 0 ? (
+            <ul className="patient-list">
+              {stats.noReturnPatients.map(patient => (
+                <li key={patient.id}>
+                  <Link to={`/pacientes/${patient.id}`} className="patient-item">
+                    {patient.nome}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="empty-message">
+              Nenhum paciente sem retorno no momento
+            </div>
+          )}
+        </DashboardCard>
+      </div>
+    </DashboardLayout>
   );
 };
 

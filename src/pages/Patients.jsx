@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import Sidebar from '../components/Sidebar';
+import DashboardLayout from '../components/DashboardLayout';
 import { Search, UserPlus, Calendar, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Patients = () => {
+  const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,84 +65,86 @@ const Patients = () => {
   };
 
   return (
-    <div className="dashboard-layout">
-      <Sidebar />
-      <main className="main-content">
-        <header className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <div>
-            <h1>Pacientes</h1>
-            <p className="auth-subtitle" style={{ textAlign: 'left', marginBottom: 0 }}>
-              Gerencie seus pacientes e acompanhe o progresso.
-            </p>
-          </div>
-          <Link to="/pacientes/novo" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-            <UserPlus size={20} />
-            Novo Paciente
-          </Link>
-        </header>
+    <DashboardLayout>
+      <header className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div>
+          <h1>Pacientes</h1>
+          <p className="auth-subtitle" style={{ textAlign: 'left', marginBottom: 0 }}>
+            Gerencie seus pacientes e acompanhe o progresso.
+          </p>
+        </div>
+        <Link to="/pacientes/novo" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', width: 'auto' }}>
+          <UserPlus size={20} />
+          <span className="hide-mobile">Novo Paciente</span>
+          <span className="show-mobile">Novo</span>
+        </Link>
+      </header>
 
-        <div className="dashboard-card" style={{ padding: '0' }}>
-          <div style={{ padding: '24px', borderBottom: '1px solid var(--gray-100)' }}>
-            <div className="search-box">
-              <Search size={20} color="var(--gray-600)" />
-              <input 
-                type="text" 
-                placeholder="Buscar paciente pelo nome..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ border: 'none', padding: '0 12px', background: 'transparent', boxShadow: 'none' }}
-              />
-            </div>
-          </div>
-
-          <div className="patient-table-container">
-            {loading ? (
-              <div className="empty-message">Carregando pacientes...</div>
-            ) : filteredPatients.length > 0 ? (
-              <table className="patient-table">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Objetivo Principal</th>
-                    <th>Última Consulta</th>
-                    <th style={{ width: '50px' }}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPatients.map(patient => (
-                    <tr key={patient.id} className="table-row-clickable">
-                      <td>
-                        <Link to={`/pacientes/${patient.id}`} className="patient-name-link">
-                          {patient.nome}
-                        </Link>
-                      </td>
-                      <td>
-                        <span className="objective-badge">
-                          {patient.objetivos?.[0] || patient.objetivo_texto || 'Não informado'}
-                        </span>
-                      </td>
-                      <td className="text-gray">
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <Calendar size={14} />
-                          {formatDate(patient.lastConsultation)}
-                        </div>
-                      </td>
-                      <td>
-                        <ChevronRight size={20} className="chevron-icon" />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="empty-message">
-                {searchTerm ? 'Nenhum paciente encontrado com esse nome' : 'Nenhum paciente cadastrado ainda'}
-              </div>
-            )}
+      <div className="dashboard-card" style={{ padding: '0' }}>
+        <div style={{ padding: '24px', borderBottom: '1px solid var(--gray-100)' }}>
+          <div className="search-box">
+            <Search size={20} color="var(--gray-600)" />
+            <input 
+              type="text" 
+              placeholder="Buscar paciente pelo nome..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ border: 'none', padding: '0 12px', background: 'transparent', boxShadow: 'none' }}
+            />
           </div>
         </div>
-      </main>
-    </div>
+
+        <div className="patient-table-container">
+          {loading ? (
+            <div className="empty-message">Carregando pacientes...</div>
+          ) : filteredPatients.length > 0 ? (
+            <table className="patient-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th className="hide-mobile">Objetivo Principal</th>
+                  <th className="hide-mobile">Última Consulta</th>
+                  <th style={{ width: '50px' }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPatients.map(patient => (
+                  <tr 
+                    key={patient.id} 
+                    className="table-row-clickable"
+                    onClick={() => navigate(`/pacientes/${patient.id}`)}
+                  >
+                    <td>
+                      <Link to={`/pacientes/${patient.id}`} className="patient-name-link" onClick={(e) => e.stopPropagation()}>
+                        {patient.nome}
+                      </Link>
+                    </td>
+                    <td className="hide-mobile">
+                      <span className="objective-badge">
+                        {patient.objetivos?.[0] || patient.objetivo_texto || 'Não informado'}
+                      </span>
+                    </td>
+                    <td className="text-gray hide-mobile">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <Calendar size={14} />
+                        {formatDate(patient.lastConsultation)}
+                      </div>
+                    </td>
+                    <td>
+                      <ChevronRight size={20} className="chevron-icon" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="empty-message">
+              {searchTerm ? 'Nenhum paciente encontrado com esse nome' : 'Nenhum paciente cadastrado ainda'}
+            </div>
+          )}
+        </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
